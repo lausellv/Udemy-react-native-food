@@ -1,31 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import yelp from '../api/yelp';
+//We don't need this anymore bc we created a useResults file.
+// import yelp from '../api/yelp';
 import SearchBar from '../components/SearchBar';
+import useResults from '../hooks/useResults';
+import ResultsList from '../components/ResultsList';
 
 const SearchScreen = () => {
   const [term, setTerm] = useState('');
-  const [results, setResults] = useState([]); // we are expecting an array of objects from the API
-  const [errorMessage, setErrorMessage] = useState('');
-  const searchApi = async (searchTerm) => {
-    console.log('Hi there!')
-    try {
-      const response = await yelp.get('/search', {
-        params: {
-          limit: 50,
-          term: searchTerm, //term: term,
-          location: 'Dallas'
-        }
-      });
-      setResults(response.data.businesses);
-    } catch (err) {
-      setErrorMessage('something went wrong');
-    }
+  const [searchApi, results, errorMessage] = useResults();
+
+  const filterResultsByPrice = price => {
+    // price === $ || $$ || $$$
+
+    return results.filter(result => {
+      return result.price === price;
+    });
   };
-// call search API when component is first rendered
-//searchApi("pasta")
-useEffect(()=>{searchApi('pasta')}, [])
 
   return (
     <View>
@@ -33,12 +25,15 @@ useEffect(()=>{searchApi('pasta')}, [])
         term={term}
         // onTermChange={newTerm => setTerm(newTerm)}
         onTermChange={setTerm}
-        onTermSubmit={()=>searchApi(term)}
+        onTermSubmit={() => searchApi(term)}
         // onTermSubmit={() => searchApi()}
       />
 
-     {errorMessage ? <Text>{errorMessage}</Text>: null} 
+      {errorMessage ? <Text>{errorMessage}</Text> : null}
       <Text>We have found {results.length} results</Text>
+      <ResultsList results={filterResultsByPrice('$')} title="Cost Effective" />
+      <ResultsList results={filterResultsByPrice('$$')} title="Bit Pricier" />
+      <ResultsList results={filterResultsByPrice('$$$')} title="Big Spender" />
     </View>
   );
 };
