@@ -8,6 +8,7 @@ import useResults from '../hooks/useResults';
 import ResultsList from '../components/ResultsList';
 
 const SearchScreen = () => {
+  // console.log(navigation);
   const [term, setTerm] = useState('');
   const [searchApi, results, errorMessage] = useResults();
 
@@ -20,9 +21,8 @@ const SearchScreen = () => {
   };
 
   return (
-   
-  //  by doing this we don't have to worry about flex 1
-  // <View style={{flex:1}}>
+    //  by doing this we don't have to worry about flex 1
+    // <View style={{flex:1}}>
     <>
       <SearchBar
         term={term}
@@ -35,9 +35,9 @@ const SearchScreen = () => {
       {errorMessage ? <Text>{errorMessage}</Text> : null}
       {/* <Text>We have found {results.length} results</Text> */}
       <ScrollView>
-        <ResultsList results={filterResultsByPrice('$')} title="Cost Effective" />
-        <ResultsList results={filterResultsByPrice('$$')} title="Bit Pricier" />
-        <ResultsList results={filterResultsByPrice('$$$')} title="Big Spender" />
+        <ResultsList  results={filterResultsByPrice('$')} title="Cost Effective" />
+        <ResultsList  results={filterResultsByPrice('$$')} title="Bit Pricier" />
+        <ResultsList  results={filterResultsByPrice('$$$')} title="Big Spender" />
       </ScrollView>
     </>
   );

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import yelp from '../api/yelp.js';
 
-function useResults () {
+function useResults() {
   const [results, setResults] = useState([]); // we are expecting an array of objects from the API
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -13,7 +13,8 @@ function useResults () {
         params: {
           limit: 50,
           term: searchTerm, //term: term,
-          location: 'Dallas'
+          location: 'San Juan'
+          
         }
       });
       setResults(response.data.businesses);
@@ -27,9 +28,8 @@ function useResults () {
     searchApi('pasta');
   }, []);
 
-
   // we need to return the parts needed in out SearchScreen
   return [searchApi, results, errorMessage];
-};
+}
 
 export default useResults;
